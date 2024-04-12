@@ -18,7 +18,7 @@ public interface MenuRepo extends JpaRepository<Menu,Integer>{
 	// //List<Menu> findByIdOrName(int id,String name);
     /*List<Menu> findByPrice(Long price);/* */
 	
-    @Query(value = "select p from Menu p where p.price <=100")
+    @Query(value = "select p from Menu p where p.price <= :price order by price")
     public List<Menu> filterByprice(Long price);
 	
 
