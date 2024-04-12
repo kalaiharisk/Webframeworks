@@ -55,4 +55,20 @@ public class MenuService {
     {          
         return mr.findAll(PageRequest.of(pageNumber, pageSize).withSort(Sort.by(Sort.Direction.ASC,field))).getContent();
     }
+    // public List <Menu> getDetails(int s, String s1){
+	// 	return er.getmenuinfo(s,s1);
+	// }
+	// public List <Menu> getDetails(int s, String s1){
+    //     return mr.findByIdOrName(s,s1);
+    // }
+	public List <Menu> getDetailsByPrice(Long i)
+    {
+        return mr.filterByprice(i);
+    }
+    public Integer deletemenudetails(int s){
+        return mr.deletemenuInfo(s);
+    }
+    public Integer updatemenudetails(int s,int s1){
+        return mr.updatemenuInfo(s,s1);
+    }
 }

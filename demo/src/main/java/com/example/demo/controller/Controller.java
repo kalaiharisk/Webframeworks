@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +15,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Menu;
+import com.example.demo.model.User;
 import com.example.demo.service.MenuService;
+import com.example.demo.service.UserService;
 @RestController
 public class Controller {
     @Autowired
 MenuService ms;
+@Autowired
+UserService us;
 @PostMapping("/adddata")
 public ResponseEntity<Menu>add(@RequestBody Menu m){
     Menu newmenu = ms.create(m);
    return new ResponseEntity<>(newmenu,HttpStatus.CREATED); 
+}
+@PostMapping("/adddata/{byId}")
+public ResponseEntity<Menu> addbyid(@RequestBody Menu m,@PathVariable("byId") int id)
+{
+    User obj=us.getUserById(id);
+    m.setUser(obj);
+    return new ResponseEntity<>(ms.create(m),HttpStatus.CREATED);
 }
 @GetMapping("/showdata")
 public ResponseEntity <List<Menu>>showinfo(){
@@ -48,10 +60,27 @@ public ResponseEntity <List<Menu>>showinfo(){
         }
         return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
     }
-    
-@GetMapping("/api/menu/{offset}/{pagesize}/{field}")
-public List<Menu> getsorting(@PathVariable int offset,@PathVariable int pagesize,@PathVariable String field)
-{
-    return ms.getsort(offset,pagesize,field);
-}
+    @GetMapping("/api/menu/{offset}/{pagesize}/{field}")
+    public List<Menu> getsorting(@PathVariable int offset,@PathVariable int pagesize,@PathVariable String field)
+    {
+        return ms.getsort(offset,pagesize,field);
+    }
+    // @GetMapping("getmenu/{id}/{name}")
+	// public List <Menu> displayAll(@PathVariable("id") int s, @PathVariable("name") String s1){
+	// 	return ms.getDetails(s,s1);
+	// }
+    @GetMapping("getmenu/{price}")
+	public List <Menu> displayAll( @PathVariable("price") Long i){
+		return ms.getDetailsByPrice(i);
+	}
+	
+	@DeleteMapping("/deletenew/{id}")
+	public String deleteeInfo(@PathVariable("id") int s){
+		return ms.deletemenudetails(s)+"Deleted";
+	}
+	
+	@PutMapping("/update/{id}/{id1}")
+	public String updateeInfo(@PathVariable("id") int s,@PathVariable("id1") int s1){
+		return ms.updatemenudetails(s,s1)+"Updated";
+	}
 }
